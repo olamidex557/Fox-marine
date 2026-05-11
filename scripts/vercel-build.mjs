@@ -5,7 +5,7 @@
 //     config.json                      -> filesystem first, else SSR function
 //     static/                          <- copy of dist/client (SPA assets)
 //     functions/ssr.func/
-//       .vc-config.json                -> { runtime: "edge", entrypoint: "index.js" }
+//       .vc-config.json                -> Node.js function metadata
 //       index.js                       -> wraps dist/server SSR fetch handler
 //       (all other dist/server files copied alongside)
 import { cp, mkdir, rm, writeFile, readdir, stat } from "node:fs/promises";
@@ -46,27 +46,37 @@ if (!existsSync(path.join(outFn, "index.js"))) {
   process.exit(1);
 }
 
-// 3. Edge function metadata
+// 3. Node.js function metadata. The TanStack/React SSR bundle uses Node
+//    stream and crypto modules, so it cannot run as a Vercel Edge Function.
 await writeFile(
   path.join(outFn, ".vc-config.json"),
   JSON.stringify(
     {
-      runtime: "edge",
-      entrypoint: "entry.js",
+      runtime: "nodejs22.x",
+      handler: "entry.js",
+      launcherType: "Nodejs",
+      shouldAddHelpers: true,
+      shouldAddSourcemapSupport: true,
     },
     null,
     2,
   ),
 );
 
-// 4. Edge wrapper that adapts the TanStack Start `{ fetch }` default export
-//    to Vercel Edge's `(request) => Response` signature.
+// Keep the wrapper ESM so it can import the Vite SSR output.
+await writeFile(path.join(outFn, "package.json"), JSON.stringify({ type: "module" }, null, 2));
+
+// 4. Web-standard Vercel Function wrapper that adapts the TanStack Start
+//    `{ fetch }` default export.
 await writeFile(
   path.join(outFn, "entry.js"),
   `import server from "./index.js";
-export default function handler(request, ctx) {
-  return server.fetch(request, {}, ctx);
-}
+
+export default {
+  fetch(request, ctx) {
+    return server.fetch(request, {}, ctx);
+  },
+};
 `,
 );
 
