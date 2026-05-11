@@ -4,27 +4,26 @@ import { Anchor, Ship, Compass, ShieldCheck, ArrowRight, Waves, Truck } from "lu
 import heroImg from "@/assets/hero-vessel.jpg";
 import portImg from "@/assets/services-port.jpg";
 import offshoreImg from "@/assets/offshore.jpg";
-import { SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Fox Marine Nigeria Limited — Dredging & Marine Services" },
+      { title: SITE_TITLE },
       {
         name: "description",
-        content:
-          "Niger Delta–based dredging and marine services: sand dredging, land reclamation, vessel hire, logistics, and wastewater treatment.",
+        content: SITE_DESCRIPTION,
       },
-      { property: "og:title", content: "Fox Marine Nigeria Limited — Dredging & Marine Services" },
+      { property: "og:title", content: SITE_TITLE },
       {
         property: "og:description",
-        content: "Niger Delta–based dredging and marine services company.",
+        content: SITE_DESCRIPTION,
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${SITE_URL}/` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Fox Marine Nigeria Limited" },
-      { name: "twitter:description", content: "Dredging & marine services in the Niger Delta." },
+      { name: "twitter:title", content: SITE_TITLE },
+      { name: "twitter:description", content: SITE_DESCRIPTION },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/` }],
   }),
