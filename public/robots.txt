@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fox-marine.vercel.app/sitemap.xml
+Sitemap: https://foxmarine.ng/sitemap.xml

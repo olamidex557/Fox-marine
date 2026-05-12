@@ -1,4 +1,4 @@
-export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? "https://fox-marine.vercel.app").replace(
+export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? "https://foxmarine.ng").replace(
   /\/$/,
   "",
 );
