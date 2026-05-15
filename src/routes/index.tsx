@@ -8,12 +8,14 @@ import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
   head: () => ({
+    title: SITE_TITLE,
     meta: [
-      { title: SITE_TITLE },
       {
         name: "description",
         content: SITE_DESCRIPTION,
       },
+      { name: "robots", content: "index, follow" },
+
       { property: "og:title", content: SITE_TITLE },
       {
         property: "og:description",
@@ -21,11 +23,18 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${SITE_URL}/` },
+
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE_TITLE },
       { name: "twitter:description", content: SITE_DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
+
+    links: [
+      {
+        rel: "canonical",
+        href: `${SITE_URL}/`,
+      },
+    ],
   }),
   component: HomePage,
 });
